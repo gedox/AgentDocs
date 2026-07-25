@@ -387,9 +387,8 @@ vault, or use an existing folder.</pre>
    Set WAITLIST_ENDPOINT to a form endpoint that accepts a POST with
    JSON {email}. Formspree ("https://formspree.io/f/xxxxxxx"), Getform,
    Tally and Buttondown all work unchanged.
-   Until it is set, the form tells the truth instead of faking success.
    ------------------------------------------------------------------ */
-const WAITLIST_ENDPOINT = "";
+const WAITLIST_ENDPOINT = "https://formspree.io/f/magvqkno";
 
 function wire(formId, inputId, msgId){
   const form = document.getElementById(formId);
