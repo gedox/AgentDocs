@@ -4,7 +4,15 @@ Turn an online documentation site into a local folder of clean Markdown files �
 one `.md` per page, mirroring the site's structure — ready to feed to AI agents.
 Then turn those docs into a **build blueprint** with a local LLM.
 
-> **Just want the app?** Double-click **`Launch AgentDocs.lnk`** in this folder.
+> **Just want the app?** Run `python -m agentdocs.ui`, or create a one-click
+> desktop launcher:
+>
+> ```bash
+> powershell -ExecutionPolicy Bypass -File assets/make_launcher.ps1
+> ```
+>
+> That writes `Launch AgentDocs.lnk` (with the app icon) into this folder.
+> It isn't committed because a Windows shortcut hard-codes absolute paths.
 
 ---
 
@@ -139,8 +147,8 @@ agentdocs_output/help.obsidian.md/
 
 ```
 AgentDocs/
-├── Launch AgentDocs.lnk    # ← double-click to start
-├── AgentDocs.bat           # what the shortcut runs
+├── AgentDocs.bat           # what the desktop launcher runs
+├── site/                   # the landing page (static, deploys anywhere)
 ├── agentdocs/
 │   ├── cli.py              # scraper CLI (discover → confirm → download)
 │   ├── discover.py         # sitemap + crawl page discovery

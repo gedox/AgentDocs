@@ -7,5 +7,18 @@ dist/
 .venv/
 venv/
 
-# Default output location
+# Scraped documentation and generated blueprints. These are other people's
+# content pulled from their sites — keep them local, never commit them.
 agentdocs_output/
+
+# Windows shortcuts store absolute paths for one machine.
+# Regenerate with: powershell -File assets\make_launcher.ps1
+*.lnk
+
+# Deploy tooling
+.vercel/
+
+# OS cruft
+Thumbs.db
+desktop.ini
+.DS_Store

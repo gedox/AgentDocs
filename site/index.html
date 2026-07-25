@@ -95,14 +95,16 @@ h1 em::after{content:"";position:absolute;left:0;right:0;bottom:.06em;height:.09
 .demo-bar span{font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);margin-left:.4rem}
 .demo img,.demo video{display:block;width:100%;height:auto;background:var(--panel)}
 /* pure-CSS hero: the whole product story, no payload */
+.demo,.demo-stage{min-width:0}
 .demo-stage{font-family:var(--mono);font-size:.78rem;line-height:1.7;padding:1.1rem 1.2rem;background:var(--panel)}
 .ds-line{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ds-tree > span:nth-child(odd){min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ds-prompt{color:var(--accent);font-weight:500}
 .ds-url{color:var(--blue)}
 .ds-out{display:flex;flex-direction:column;margin:.5rem 0 .8rem}
 .ds-dim{color:var(--ink-faint)}
 .ds-ok{color:var(--ok)}
-.ds-tree{display:grid;grid-template-columns:1fr auto;gap:.15rem .8rem;padding:.7rem .9rem;
+.ds-tree{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.15rem .8rem;padding:.7rem .9rem;
   border:1px solid var(--line-soft);border-radius:var(--r);background:var(--paper-2)}
 .ds-sep{display:flex;align-items:center;gap:.6rem;margin:.9rem 0 .7rem;color:var(--accent);
   font-size:.68rem;letter-spacing:.14em;text-transform:uppercase}
@@ -137,7 +139,7 @@ section.plain{border-top:1px dashed var(--line)}
 .step code{font-family:var(--mono);font-size:.85em;background:var(--paper);border:1px solid var(--line-soft);border-radius:3px;padding:.1em .35em}
 
 /* code / blueprint sample */
-.sample{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2.6rem;align-items:start}
+.sample{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1.5rem;margin-top:2.6rem;align-items:start}
 .card{border:1.5px solid var(--ink);border-radius:var(--r);background:var(--panel);overflow:hidden}
 .card-h{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);
   padding:.6rem .9rem;border-bottom:1px solid var(--line);background:var(--paper-2)}
@@ -165,8 +167,10 @@ footer .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;
   font-family:var(--mono);font-size:.75rem;color:var(--ink-faint)}
 
 @media (max-width:860px){
-  .hero-grid{grid-template-columns:1fr}
-  .sample{grid-template-columns:1fr}
+  /* minmax(0,…) not 1fr: a bare 1fr refuses to shrink below the mono
+     content's min-content width and pushes the whole page sideways. */
+  .hero-grid{grid-template-columns:minmax(0,1fr)}
+  .sample{grid-template-columns:minmax(0,1fr)}
   .nav-links .hide-sm{display:none}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -387,9 +391,8 @@ vault, or use an existing folder.</pre>
    Set WAITLIST_ENDPOINT to a form endpoint that accepts a POST with
    JSON {email}. Formspree ("https://formspree.io/f/xxxxxxx"), Getform,
    Tally and Buttondown all work unchanged.
-   Until it is set, the form tells the truth instead of faking success.
    ------------------------------------------------------------------ */
-const WAITLIST_ENDPOINT = "";
+const WAITLIST_ENDPOINT = "https://formspree.io/f/magvqkno";
 
 function wire(formId, inputId, msgId){
   const form = document.getElementById(formId);
