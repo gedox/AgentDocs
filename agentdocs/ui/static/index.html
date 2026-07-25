@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AgentDocs — Drafting Table</title>
+  <link rel="icon" href="/static/favicon.ico" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="titlebar">
+    <div class="brand">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="26" height="26">
+          <rect x="3" y="3" width="26" height="26" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M3 11h26M3 19h26M11 3v26M19 3v26" stroke="currentColor" stroke-width="0.7" opacity="0.5"/>
+          <path d="M8 24 L16 8 L24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <div class="brand-text">
+        <h1>AgentDocs</h1>
+        <p class="tagline">documentation &rarr; buildable blueprints</p>
+      </div>
+    </div>
+    <div class="status-strip" id="statusStrip">
+      <span class="chip" id="ollamaChip"><i class="dot"></i> Ollama</span>
+      <span class="chip subtle" id="rootChip">no folder loaded</span>
+    </div>
+  </header>
+
+  <main class="workbench">
+    <!-- LEFT: folder + docsets -->
+    <aside class="rail">
+      <section class="loader">
+        <label class="field-label" for="rootInput">Documentation root</label>
+        <div class="path-row">
+          <input id="rootInput" type="text" spellcheck="false" placeholder="C:\path\to\agentdocs_output" />
+          <button id="loadBtn" class="btn btn-ink">Load</button>
+        </div>
+        <div class="browse-hint">
+          <button id="browseBtn" class="link-btn">browse folders…</button>
+        </div>
+        <div id="browser" class="browser hidden"></div>
+      </section>
+
+      <section class="docsets">
+        <h2 class="rail-title">Doc sets <span id="docsetCount" class="count"></span></h2>
+        <div id="docsetList" class="docset-list">
+          <p class="empty-hint">Load a folder to see the documentation sets inside it.</p>
+        </div>
+      </section>
+    </aside>
+
+    <!-- CENTER: tabbed views -->
+    <section class="stage">
+      <nav class="tabs" id="tabs">
+        <button class="tab active" data-tab="docs">Documentation</button>
+        <button class="tab" data-tab="blueprint">Blueprint</button>
+        <button class="tab" data-tab="commands">Commands</button>
+      </nav>
+
+      <!-- DOCS -->
+      <div class="tabpane active" data-pane="docs">
+        <div class="split">
+          <div class="filetree" id="fileTree">
+            <p class="empty-hint">Pick a doc set on the left to browse its pages.</p>
+          </div>
+          <article class="reader" id="reader">
+            <div class="reader-empty">
+              <div class="drafting-emblem" aria-hidden="true"></div>
+              <p>Select a page to read it.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- BLUEPRINT -->
+      <div class="tabpane" data-pane="blueprint">
+        <div class="blueprint-head">
+          <div>
+            <h3 id="bpTitle">Create a blueprint</h3>
+            <p class="muted" id="bpSubtitle">Select a doc set, choose a local model, and turn the docs into a functional spec an AI can build from.</p>
+          </div>
+          <div class="bp-controls">
+            <select id="modelSelect" class="select" title="Local Ollama model"></select>
+            <button id="bpRunBtn" class="btn btn-accent" disabled>Create blueprint</button>
+          </div>
+        </div>
+        <div class="blueprint-body">
+          <div class="bp-stream-wrap">
+            <div class="bp-progress" id="bpProgress"></div>
+            <pre class="bp-stream" id="bpStream" aria-live="polite"></pre>
+          </div>
+          <div class="bp-files">
+            <h4>Blueprint files</h4>
+            <div id="bpFileList" class="bp-file-list">
+              <p class="empty-hint">Generated spec files will appear here. Click any to preview.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMMANDS -->
+      <div class="tabpane" data-pane="commands">
+        <div class="commands-intro">
+          <h3>Command shortcuts</h3>
+          <p class="muted">Copy a command, or send it straight to the terminal below.</p>
+        </div>
+        <div id="commandList" class="command-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- BOTTOM: mini terminal -->
+  <section class="terminal-drawer" id="terminalDrawer">
+    <div class="terminal-bar" id="terminalBar">
+      <span class="term-title">◈ terminal</span>
+      <span class="term-cwd" id="termCwd"></span>
+      <div class="term-actions">
+        <button id="termClear" class="link-btn">clear</button>
+        <button id="termToggle" class="link-btn">hide</button>
+      </div>
+    </div>
+    <div class="terminal-body" id="terminalBody">
+      <pre id="termOut" class="term-out"></pre>
+      <div class="term-input-row">
+        <span class="prompt">&rsaquo;</span>
+        <input id="termInput" type="text" spellcheck="false" placeholder="python -m agentdocs https://…  (Enter to run)" />
+        <button id="termRun" class="btn btn-ink small">Run</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- modal preview for blueprint / files -->
+  <div class="modal hidden" id="modal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <span id="modalTitle" class="modal-title"></span>
+        <div>
+          <button id="modalCopy" class="link-btn">copy</button>
+          <button id="modalClose" class="link-btn">close</button>
+        </div>
+      </div>
+      <article id="modalBody" class="modal-body markdown"></article>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
